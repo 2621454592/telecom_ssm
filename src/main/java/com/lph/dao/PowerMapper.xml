@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.lph.dao.PowerDao">
+<!--  通过aid查询权限 -->
+ <select id="selectPowerByAid" resultType="Power">
+ select * from tc_power where id in(select pid from tc_role_power where rid in(select rid from tc_admin_role where aid=#{aid}))
+ </select>
+<!--  通过rid查询所有权限 -->
+ <select id="selectPowerByRid" resultType="Power">
+ select id,pclass,purl,pname from tc_power where id in(select pid from tc_role_power where rid=#{rid}) and state=0
+ </select>
+<!--  查询所有权限 -->
+<select id="selectAllPower" resultType="Power">
+select * from tc_power
+</select>
+ </mapper>

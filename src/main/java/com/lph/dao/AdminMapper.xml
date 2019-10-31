@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+  <mapper namespace="com.lph.dao.AdminDao">
+ <resultMap type="Admin" id="AdminResultMap">
+ <id property="id" column="id"/>
+ <result property="aname" column="aname"/>
+ <result property="apwd" column="apwd"/>
+ <result property="acname" column="acname"/>
+ <result property="atel" column="atel"/>
+ <result property="aemail" column="aemail"/>
+ <result property="aimg" column="aimg"/>
+ <result property="by001" column="by001"/>
+ <result property="by002" column="by002"/>
+ <result property="by003" column="by003"/>
+ <result property="by004" column="by004"/>
+ <result property="createUser" column="createuser"/>
+ <result property="createTime" column="createtime"/>
+ <result property="updateUser" column="updateuser"/>
+ <result property="updateTime" column="updatetime"/>
+ </resultMap>
+<!--  通过账号密码查询admin -->
+ <select id="selectAdminByUsernameAndPwd" resultMap="AdminResultMap" parameterType="admin">
+ select id,aname,apwd,acname,atel,aemail,aimg,by001,by002,by003,by004,createuser,createtime,updateuser,updatetime
+			from tc_admin where acname=#{acname} and apwd=#{apwd}
+ </select>
+<!--  修改用户密码 -->
+ <update id="updateUserPwd">
+ update tc_admin set apwd=#{apwd} where id=#{id}
+ </update>
+<!--  修改个人信息 -->
+<update id="updateUserinfo">
+update tc_admin set aname=#{aname},atel=#{atel},aemail=#{aemail},updateuser=#{acname},updatetime=now() where id=#{id}
+</update>
+<!-- 查询所有管理员 -->
+<select id="selectAllAdmin" resultMap="AdminResultMap">
+ select * from tc_admin
+</select>
+<!-- 添加管理员,不包括角色和权限 -->
+<insert id="insertAdmin" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+insert into tc_admin(aname,apwd,acname,atel,aemail,aimg,createuser,createtime) values(#{aname},#{apwd},#{acname},#{atel},#{aemail},#{aimg},#{createUser},now())
+</insert>
+<!-- 添加管理员角色 -->
+<insert id="insertAdminRole">
+insert into tc_admin_role(aid,rid) values
+<foreach collection="roleList" item="role" separator=",">
+(#{id},#{role.id})
+</foreach>
+</insert>
+<!-- 删除管理员 -->
+<delete id="deleteAdmin">
+delete from tc_admin where id=#{aid}
+</delete>
+<!-- 删除管理员角色 -->
+<delete id="deleteAdminRole">
+delete from tc_admin_role where aid=#{aid}
+</delete>
+ </mapper>
