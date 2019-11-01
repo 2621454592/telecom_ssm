@@ -111,7 +111,7 @@ public class AdminController {
 	}
 	@RequestMapping("/ExitAction")
 	public String ExitAction(HttpServletRequest request) { //退出
-		request.getSession().invalidate();
+		request.getSession().invalidate();   //销毁session
 		return "redirect:login";
 	}
 	
